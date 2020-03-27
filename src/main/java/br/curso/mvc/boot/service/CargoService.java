@@ -5,7 +5,8 @@ import java.util.List;
 import br.curso.mvc.boot.domain.Cargo;
 
 public interface CargoService {
-    void salvar(Cargo cargo);        
+    
+	void salvar(Cargo cargo);        
     
     void editar(Cargo cargo);        
     

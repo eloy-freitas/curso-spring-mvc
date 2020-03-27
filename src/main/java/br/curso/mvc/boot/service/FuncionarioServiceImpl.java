@@ -32,13 +32,13 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 		
 	}
 
-	@Override
+	@Override @Transactional(readOnly = true)
 	public Funcionario buscarPorId(Long id) {
 		
 		return dao.findById(id);
 	}
 
-	@Override
+	@Override @Transactional(readOnly = true)
 	public List<Funcionario> buscarTodos() {
 		
 		return dao.findAll();
