@@ -25,14 +25,16 @@ public class DepartamentoController {
     }
     
     @GetMapping("/listar")
-    public String listar(){
+    public String listar(ModelMap model){
+    	model.addAttribute("departamentos", service.buscarTodos());
         return "/departamento/lista";
     }
     
     @PostMapping("/salvar")
     public String salvar(Departamento departamento, RedirectAttributes attr) {
+    	
     	service.salvar(departamento);
-    	attr.addAttribute("success", "Departamento inserido com sucesso!");
+    	attr.addFlashAttribute("success", "Departamento inserido com sucesso!");
     	return "redirect:/departamentos/cadastrar";
     }
     
@@ -44,6 +46,7 @@ public class DepartamentoController {
     
     @PostMapping("/editar")
     public String editar(Departamento departamento, RedirectAttributes attr) {
+    	
     	service.editar(departamento);
     	attr.addFlashAttribute("success", "Departamento editado com sucesso!");
     	return "redirect:/departamentos/cadastrar";
@@ -51,9 +54,15 @@ public class DepartamentoController {
     
     @GetMapping("/excluir/{id}")
     public String excluir(@PathVariable("id") Long id, ModelMap model) {
-    
-    	service.excluir(id);
-    	return "redirect:/departamento/listar";
+    	if(service.departamentoTemCargos(id)) {
+    		model.addAttribute("fail", "Departamento não removido, possui cargos associados!");
+    		
+    	}else {
+    		service.excluir(id);
+    		model.addAttribute("success", "Departamento removido com sucesso!");
+    	}
+    	
+    	return listar(model);
     }
     
     
