@@ -5,9 +5,7 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 
 
@@ -29,20 +27,21 @@ public abstract class AbstractDao<T, PK extends Serializable> {
 	}
 	
 	public void update(T entity) {
+		
 		entityManager.merge(entity);
 	}
 	
-	public void delete(PK Id) {
-		entityManager.remove(Id);
+	public void delete(PK id) {
+		entityManager.remove(entityManager.getReference(entityClass, id));
 	}
 	
-	public T findById(PK Id) {
-		return entityManager.find(entityClass, Id);
+	public T findById(PK id) {
+		return entityManager.find(entityClass, id);
 	}
 	
 	public List<T> findAll(){
 		return entityManager
-				.createQuery("from" + entityClass.getSimpleName(), entityClass)
+				.createQuery("from " + entityClass.getSimpleName(), entityClass)
 				.getResultList();
 	}
 	
